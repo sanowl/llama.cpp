@@ -17,8 +17,8 @@ from datetime import datetime
 import matplotlib
 import matplotlib.dates
 import matplotlib.pyplot as plt
-import requests
 from statistics import mean
+from security import safe_requests
 
 
 def main(args_in: list[str] | None = None) -> None:
@@ -118,7 +118,7 @@ def main(args_in: list[str] | None = None) -> None:
                    'kv_cache_usage_ratio', 'requests_processing', 'requests_deferred']
 
         for metric in metrics:
-            resp = requests.get(f"http://localhost:9090/api/v1/query_range",
+            resp = safe_requests.get(f"http://localhost:9090/api/v1/query_range",
                                 params={'query': 'llamacpp:' + metric, 'start': start_time, 'end': end_time, 'step': 2})
 
             with open(f"{metric}.json", 'w') as metric_json:

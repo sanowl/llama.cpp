@@ -7,6 +7,7 @@ import json
 import re
 import sys
 from typing import Any, List, Optional, Set, Tuple, Union
+from security import safe_requests
 
 def _build_repetition(item_rule, min_items, max_items, separator_rule=None):
 
@@ -348,14 +349,13 @@ class SchemaConverter:
                 if ref is not None and ref not in self._refs:
                     if ref.startswith('https://'):
                         assert self._allow_fetch, 'Fetching remote schemas is not allowed (use --allow-fetch for force)'
-                        import requests
 
                         frag_split = ref.split('#')
                         base_url = frag_split[0]
 
                         target = self._refs.get(base_url)
                         if target is None:
-                            target = self.resolve_refs(requests.get(ref).json(), base_url)
+                            target = self.resolve_refs(safe_requests.get(ref).json(), base_url)
                             self._refs[base_url] = target
 
                         if len(frag_split) == 1 or frag_split[-1] == '':
@@ -788,8 +788,7 @@ def main(args_in = None):
 
     if args.schema.startswith('https://'):
         url = args.schema
-        import requests
-        schema = requests.get(url).json()
+        schema = safe_requests.get(url).json()
     elif args.schema == '-':
         url = 'stdin'
         schema = json.load(sys.stdin)
