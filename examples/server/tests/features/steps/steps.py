@@ -10,7 +10,6 @@ import subprocess
 import sys
 import threading
 import time
-import requests
 from collections.abc import Sequence
 from contextlib import closing
 from re import RegexFlag
@@ -23,6 +22,7 @@ from openai.types.chat import ChatCompletionChunk
 from behave import step  # pyright: ignore[reportAttributeAccessIssue]
 from behave.api.async_step import async_run_until_complete
 from prometheus_client import parser
+from security import safe_requests
 
 # pyright: reportRedeclaration=false
 
@@ -100,7 +100,7 @@ def step_download_lora_file(context, lora_file_url: str):
     file_name = lora_file_url.split('/').pop()
     context.lora_file = f'../../../{file_name}'
     with open(context.lora_file, 'wb') as f:
-        f.write(requests.get(lora_file_url).content)
+        f.write(safe_requests.get(lora_file_url).content)
 
 @step('a model file {model_file}')
 def step_model_file(context, model_file: str):
