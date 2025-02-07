@@ -23,6 +23,7 @@ from openai.types.chat import ChatCompletionChunk
 from behave import step  # pyright: ignore[reportAttributeAccessIssue]
 from behave.api.async_step import async_run_until_complete
 from prometheus_client import parser
+from security import safe_command
 
 # pyright: reportRedeclaration=false
 
@@ -1455,8 +1456,7 @@ def start_server_background(context):
         'stdout': subprocess.PIPE,
         'stderr': subprocess.PIPE
     }
-    context.server_process = subprocess.Popen(
-        [str(arg) for arg in [context.server_path, *server_args]],
+    context.server_process = safe_command.run(subprocess.Popen, [str(arg) for arg in [context.server_path, *server_args]],
         **pkwargs)  # pyright: ignore[reportArgumentType, reportCallIssue]
 
     def server_log(in_stream, out_stream):
