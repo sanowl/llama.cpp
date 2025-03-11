@@ -28,23 +28,23 @@ def calculatecorrect():
     for listing in os.listdir(directory):
         filename = os.fsdecode(listing)
         if filename.endswith(".txt"):
-            file = open("./examples/jeopardy/results/" + filename, "rt")
-            global labels
-            global numEntries
-            global numbers
-            labels.append(filename[:-4])
-            numEntries += 1
-            i = 1
-            totalcorrect = 0
-            for line in file.readlines():
-                if line.strip() != "------":
-                    print(line)
-                else:
-                    print("Correct answer: " + rows[i][2] + "\n")
-                    i += 1
-                    print("Did the AI get the question right? (y/n)")
-                    if input() == "y":
-                        totalcorrect += 1
+            with open("./examples/jeopardy/results/" + filename, "rt") as file:
+                global labels
+                global numEntries
+                global numbers
+                labels.append(filename[:-4])
+                numEntries += 1
+                i = 1
+                totalcorrect = 0
+                for line in file.readlines():
+                    if line.strip() != "------":
+                        print(line)
+                    else:
+                        print("Correct answer: " + rows[i][2] + "\n")
+                        i += 1
+                        print("Did the AI get the question right? (y/n)")
+                        if input() == "y":
+                            totalcorrect += 1
             numbers.append(totalcorrect)
 
 
