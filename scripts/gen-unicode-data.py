@@ -12,7 +12,7 @@ UNICODE_DATA_URL = "https://www.unicode.org/Public/UCD/latest/ucd/UnicodeData.tx
 
 # see https://www.unicode.org/L2/L1999/UnicodeData.html
 def unicode_data_iter():
-    res = requests.get(UNICODE_DATA_URL)
+    res = requests.get(UNICODE_DATA_URL, timeout=60)
     res.raise_for_status()
     data = res.content.decode()
 

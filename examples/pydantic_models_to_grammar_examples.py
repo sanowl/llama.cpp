@@ -28,7 +28,7 @@ def create_completion(host, prompt, gbnf_grammar):
     print(f"  Request:\n    Grammar:\n{textwrap.indent(gbnf_grammar, '      ')}\n    Prompt:\n{textwrap.indent(prompt.rstrip(), '      ')}")
     headers = {"Content-Type": "application/json"}
     data = {"prompt": prompt, "grammar": gbnf_grammar}
-    result = requests.post(f"http://{host}/completion", headers=headers, json=data).json()
+    result = requests.post(f"http://{host}/completion", headers=headers, json=data, timeout=60).json()
     assert data.get("error") is None, data
     logging.info("Result: %s", result)
     content = result["content"]

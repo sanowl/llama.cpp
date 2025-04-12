@@ -100,7 +100,7 @@ def step_download_lora_file(context, lora_file_url: str):
     file_name = lora_file_url.split('/').pop()
     context.lora_file = f'../../../{file_name}'
     with open(context.lora_file, 'wb') as f:
-        f.write(requests.get(lora_file_url).content)
+        f.write(requests.get(lora_file_url, timeout=60).content)
 
 @step('a model file {model_file}')
 def step_model_file(context, model_file: str):
