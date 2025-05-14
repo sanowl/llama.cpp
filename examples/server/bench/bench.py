@@ -19,6 +19,7 @@ import matplotlib.dates
 import matplotlib.pyplot as plt
 import requests
 from statistics import mean
+from security import safe_command
 
 
 def main(args_in: list[str] | None = None) -> None:
@@ -222,7 +223,7 @@ def start_benchmark(args):
     args = f"SERVER_BENCH_N_PROMPTS={args.n_prompts} SERVER_BENCH_MAX_PROMPT_TOKENS={args.max_prompt_tokens} SERVER_BENCH_MAX_CONTEXT={args.max_tokens} "
     args = args + ' '.join([str(arg) for arg in [k6_path, *k6_args]])
     print(f"bench: starting k6 with: {args}")
-    k6_completed = subprocess.run(args, shell=True, stdout=sys.stdout, stderr=sys.stderr)
+    k6_completed = safe_command.run(subprocess.run, args, shell=True, stdout=sys.stdout, stderr=sys.stderr)
     if k6_completed.returncode != 0:
         raise Exception("bench: unable to run k6")
 
@@ -278,8 +279,7 @@ def start_server_background(args):
         'stdout': subprocess.PIPE,
         'stderr': subprocess.PIPE
     }
-    server_process = subprocess.Popen(
-        args,
+    server_process = safe_command.run(subprocess.Popen, args,
         **pkwargs)  # pyright: ignore[reportArgumentType, reportCallIssue]
 
     def server_log(in_stream, out_stream):

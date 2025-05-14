@@ -7,6 +7,7 @@ import subprocess
 import sys
 
 import yaml
+from security import safe_command
 
 logger = logging.getLogger("run-with-preset")
 
@@ -135,7 +136,7 @@ elif num_unused > 0:
 
 command_list += unknown_args
 
-sp = subprocess.Popen(command_list)
+sp = safe_command.run(subprocess.Popen, command_list)
 
 while sp.returncode is None:
     try:
