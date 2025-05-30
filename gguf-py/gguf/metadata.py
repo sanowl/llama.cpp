@@ -122,7 +122,7 @@ class Metadata:
         # The model card metadata is assumed to always be in YAML
         # ref: https://github.com/huggingface/transformers/blob/a5c642fe7a1f25d3bdcd76991443ba6ff7ee34b2/src/transformers/modelcard.py#L468-L473
         with open(model_card_path, "r", encoding="utf-8") as f:
-            if f.readline() == "---\n":
+            if f.readline(5_000_000) == "---\n":
                 raw = f.read().partition("---\n")[0]
                 data = yaml.safe_load(raw)
                 if isinstance(data, dict):
