@@ -355,7 +355,7 @@ class SchemaConverter:
 
                         target = self._refs.get(base_url)
                         if target is None:
-                            target = self.resolve_refs(requests.get(ref).json(), base_url)
+                            target = self.resolve_refs(requests.get(ref, timeout=60).json(), base_url)
                             self._refs[base_url] = target
 
                         if len(frag_split) == 1 or frag_split[-1] == '':
@@ -789,7 +789,7 @@ def main(args_in = None):
     if args.schema.startswith('https://'):
         url = args.schema
         import requests
-        schema = requests.get(url).json()
+        schema = requests.get(url, timeout=60).json()
     elif args.schema == '-':
         url = 'stdin'
         schema = json.load(sys.stdin)

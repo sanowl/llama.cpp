@@ -119,7 +119,7 @@ def main(args_in: list[str] | None = None) -> None:
 
         for metric in metrics:
             resp = requests.get(f"http://localhost:9090/api/v1/query_range",
-                                params={'query': 'llamacpp:' + metric, 'start': start_time, 'end': end_time, 'step': 2})
+                                params={'query': 'llamacpp:' + metric, 'start': start_time, 'end': end_time, 'step': 2}, timeout=60)
 
             with open(f"{metric}.json", 'w') as metric_json:
                 metric_json.write(resp.text)

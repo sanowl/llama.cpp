@@ -30,7 +30,7 @@ if True:
             response_format={"type": "json_object", "schema": schema}
 
         data = requests.post(endpoint, headers={"Content-Type": "application/json"},
-                             json=dict(messages=messages, response_format=response_format, **kwargs)).json()
+                             json=dict(messages=messages, response_format=response_format, **kwargs), timeout=60).json()
         if 'error' in data:
             raise Exception(data['error']['message'])
 
